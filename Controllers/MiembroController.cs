@@ -92,7 +92,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
         }
 
         // DELETE api/<MiembroController>/5
-        [HttpDelete("{id}")]
+        [HttpDelete("{idMiembroToDelete}")]
         public async Task<IActionResult> Delete(int idMiembroToDelete)
         {
 
