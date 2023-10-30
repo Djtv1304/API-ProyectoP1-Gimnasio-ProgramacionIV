@@ -31,6 +31,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
             List<Miembro> miembros = await _dbContext.Miembro.ToListAsync();
 
             return Ok(miembros);
+
         }
 
         // GET api/<MiembroController>/5
