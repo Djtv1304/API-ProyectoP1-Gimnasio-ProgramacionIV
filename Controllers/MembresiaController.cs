@@ -46,14 +46,25 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
         [HttpGet("/MiembrosDeUnaMembresia/{idMembresia}")]
         public async Task<IActionResult> GetMiembrosDeUnaMembresia(int idMembresia)
         {
+            // Buscar la membresía
+            Membresia membresia = await _dbContext.Membresia
+                .SingleOrDefaultAsync(m => m.idMembresia == idMembresia);
 
-            Membresia membresiaConMiembrosFounded = await _dbContext.Membresia
-                .Include(data => data.Miembros)
-                .SingleOrDefaultAsync(data => data.idMembresia == idMembresia);
+            // Si la membresía no existe, devolver BadRequest
+            if (membresia == null)
+            {
+                return BadRequest("La membresía que consultó no existe!");
+            }
 
-            return membresiaConMiembrosFounded == null ? BadRequest() : Ok(membresiaConMiembrosFounded);
+            // Buscar los miembros que tienen esta membresía
+            List<Miembro> miembros = await _dbContext.Miembro
+                .Where(m => m.idMembresia == idMembresia)
+                .ToListAsync();
 
+            // Si todo está bien, devolver la lista de miembros
+            return miembros.Count > 0 ? Ok(miembros) : BadRequest("No existen miembros asociados a la membresía consultada!");
         }
+
 
         // Renovar membresia
         [HttpGet("/RenovarMembresia/{idMiembro}")]
@@ -66,7 +77,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
             // Si el miembro no existe, devolver BadRequest
             if (miembro == null)
             {
-                return BadRequest("El miembro no existe!");
+                return BadRequest("El miembro para renovar la membresía no existe!");
             }
 
             // Buscar la membresía del miembro
@@ -89,19 +100,28 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
         {
             // Buscar el miembro
             Miembro miembro = await _dbContext.Miembro
-                .Include(m => m.Membresia)
                 .SingleOrDefaultAsync(m => m.idMiembro == idMiembro);
 
             // Si el miembro no existe, devolver BadRequest
             if (miembro == null)
             {
-                return BadRequest("El miembro no existe.");
+                return BadRequest("El miembro al que desea elminar la membresía no existe!");
             }
 
             // Comprobar si el miembro tiene una membresía
             if (miembro.idMembresia == null || miembro.idMembresia == -1)
             {
-                return BadRequest("El miembro no tiene una membresía.");
+                return BadRequest("El miembro no tiene una membresía para eliminar!");
+            }
+
+            // Buscar la membresía del miembro
+            Membresia membresia = await _dbContext.Membresia
+                .SingleOrDefaultAsync(m => m.idMembresia == miembro.idMembresia);
+
+            // Si la membresía no existe, devolver BadRequest
+            if (membresia == null)
+            {
+                return BadRequest("La membresía a elminar no existe!");
             }
 
             // Eliminar la membresía del miembro
@@ -111,8 +131,9 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
             await _dbContext.SaveChangesAsync();
 
             // Si todo está bien, devolver Ok
-            return Ok("La membresía ha sido cancelada con éxito.");
+            return Ok($"La membresía del miembro {miembro.nombreMiembro} ha sido cancelada con éxito!");
         }
+
 
 
         // POST api/<MembresiaController>

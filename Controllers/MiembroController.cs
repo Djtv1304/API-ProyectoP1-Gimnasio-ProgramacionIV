@@ -21,8 +21,6 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
 
         }
 
-
-
         // GET: api/<MiembroController>
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -82,6 +80,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
             }
 
             miembroToReplace.nombreMiembro = newMiembro.nombreMiembro == null ? miembroToReplace.nombreMiembro : newMiembro.nombreMiembro;
+            miembroToReplace.idMembresia = newMiembro.idMembresia == null ? miembroToReplace.idMembresia : newMiembro.idMembresia;
             miembroToReplace.apellidoMiembro = newMiembro.apellidoMiembro == null ? miembroToReplace.apellidoMiembro : newMiembro.nombreMiembro;
             miembroToReplace.emailMiembro = newMiembro.emailMiembro == null ? miembroToReplace.apellidoMiembro: newMiembro.emailMiembro;
             miembroToReplace.fechaInscripcion = newMiembro.fechaInscripcion == null ? miembroToReplace.fechaInscripcion: newMiembro.fechaInscripcion;

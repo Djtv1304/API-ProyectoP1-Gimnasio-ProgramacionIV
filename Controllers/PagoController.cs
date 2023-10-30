@@ -36,7 +36,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
 
             Pago pagoFounded = await _dbContext.Pago.SingleOrDefaultAsync(p => p.idPago == idPago);
 
-            return pagoFounded == null ? NotFound("El pago no se ha encontrado!") : Ok(pagoFounded);
+            return pagoFounded == null ? NotFound("El pago no se ha encontrado o no existe!") : Ok(pagoFounded);
 
         }
 

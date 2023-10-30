@@ -11,9 +11,6 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Models
         [Required]
         public int idMembresia { get; set; }
 
-        [ForeignKey("idMembresia")]
-        public Membresia Membresia { get; set; }
-
         [Required]
         public string nombreMiembro { get; set; }
 
