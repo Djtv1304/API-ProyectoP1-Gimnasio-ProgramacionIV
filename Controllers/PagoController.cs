@@ -2,6 +2,7 @@
 using API_ProyectoP1_Gimnasio_ProgramacionIV.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -45,49 +46,62 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
         public async Task<IActionResult> Post([FromBody] Pago pago)
         {
 
+            if (pago == null)
+            {
+
+                return BadRequest("El pago no se registró correctamente, por favor intente de nuevo!");
+
+            }
+
             _dbContext.Pago.Add(pago);
 
             await _dbContext.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(Get), new { id = pago.idPago }, pago);
+            return Ok(pago);
 
         }
 
         // PUT api/<PagoController>/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] Pago pago)
+        [HttpPut("{idPago}")]
+        public async Task<IActionResult> Put(int idPago, [FromBody] Pago newPago)
         {
 
-            if (id != pago.idPago)
+            Pago pagoToReplace = await _dbContext.Pago.FirstOrDefaultAsync(data => data.idPago == idPago);
+
+            if ( idPago == null || idPago < 0 || pagoToReplace == null)
             {
-                return BadRequest();
+
+                return BadRequest("El pago a reemplazar no existe o el nuevo pago tiene errores, por favor intente de nuevo!");
+
             }
 
-            _dbContext.Entry(pago).State = EntityState.Modified;
+            _dbContext.Entry(newPago).State = EntityState.Modified;
 
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(newPago);
 
         }
 
         // DELETE api/<PagoController>/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{idPago}")]
+        public async Task<IActionResult> Delete(int idPago)
         {
 
-            var pago = await _dbContext.Pago.FindAsync(id);
+            Pago pagoToDelete = await _dbContext.Pago.FirstOrDefaultAsync(data => data.idPago == idPago);
 
-            if (pago == null)
+            if (pagoToDelete == null)
             {
-                return NotFound();
+
+                return NotFound("El pago a borrar no se ha encontrado!");
+
             }
 
-            _dbContext.Pago.Remove(pago);
+            _dbContext.Pago.Remove(pagoToDelete);
 
             await _dbContext.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("El pago ha sido eliminado exitosamente!");
 
         }
 
@@ -100,7 +114,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
 
             if (pagos == null || pagos.Count == 0)
             {
-                return NotFound("No se encontraron pagos para este miembro.");
+                return NotFound("No se encontraron pagos para este miembro!");
             }
 
             return Ok(pagos);
