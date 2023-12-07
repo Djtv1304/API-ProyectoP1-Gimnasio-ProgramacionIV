@@ -110,7 +110,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Controllers
         public async Task<IActionResult> PagosPorMiembro(int idMiembro)
         {
 
-            var pagos = await _dbContext.Pago.Where(p => p.miembroId == idMiembro).ToListAsync();
+            List<Pago> pagos = await _dbContext.Pago.Where(p => p.miembroId == idMiembro).ToListAsync();
 
             if (pagos == null || pagos.Count == 0)
             {

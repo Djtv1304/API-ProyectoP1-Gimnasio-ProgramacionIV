@@ -23,6 +23,7 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Data
         public DbSet<Membresia> Membresia { get; set; }
         public DbSet<Pago> Pago { get; set; }
         public DbSet<Visita> Visita { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
 
         // Agregar datos a través de código con esta función
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -137,6 +138,22 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Data
                     nombreMembresia = "Membresia Bronce",
                     duracionMembresia = 3,
                     precioMembresia = 30.0
+                }
+            );
+
+
+            modelBuilder.Entity<Usuario>().HasData(
+                new Usuario
+                {
+                    idUsuario = 1,
+                    username = "oscar",
+                    password = "123"
+                },
+                new Usuario
+                {
+                    idUsuario = 2,
+                    username = "diego",
+                    password = "123"
                 }
             );
 
