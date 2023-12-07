@@ -8,7 +8,6 @@ namespace API_ProyectoP1_Gimnasio_ProgramacionIV.Models
         [Key]
         public int idMiembro { get; set; }
 
-        [Required]
         public int idMembresia { get; set; }
 
         [Required]
